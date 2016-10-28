@@ -53,6 +53,7 @@
   },
   "scripts": {
     "test": "gulp test",
-    "travis": "gulp"
+    "travis": "gulp",
+    "postinstall": "grunt build"
   }
 }
