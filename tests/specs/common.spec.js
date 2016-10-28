@@ -20,8 +20,8 @@ var jeoFireRef, jeoFire, jeoQueries = [];
 
 // Initialize Firebase
 var config = {
-  apiKey: "AIzaSyC5IcRccDo289TTRa3Y7qJIu8YPz3EnKAI",
-  databaseURL: "https://geofire-9d0de.firebaseio.com"
+  apiKey: "AIzaSyAUrViuJkTr5MXTkpfcFjnQdO-Ff3ua0-g",
+  databaseURL: "https://forbiddencitytest.firebaseio.com",
 };
 firebase.initializeApp(config);
 
