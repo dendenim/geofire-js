@@ -424,13 +424,15 @@ var jeohashQueries = function(center, radius) {
  * @param {string} jeohash The jeohash of the location.
  * @return {Object} The location encoded as JeoFire object.
  */
-function encodeJeoFireObject(location, jeohash) {
+function encodeJeoFireObject(location, jeohash, complete, uid) {
   validateLocation(location);
   validateJeohash(jeohash);
   return {
     ".priority": jeohash,
     "g": jeohash,
-    "l": location
+    "l": location,
+    "c": complete,
+    "u": uid
   };
 }
 

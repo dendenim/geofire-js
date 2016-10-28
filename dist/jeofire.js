@@ -75,7 +75,7 @@ var JeoFire = function(firebaseRef) {
    * @param {Array.<number>|undefined} location The [latitude, longitude] pair to add.
    * @return {Promise.<>} A promise that is fulfilled when the write is complete.
    */
-  this.set = function(keyOrLocations, location) {
+  this.set = function(keyOrLocations, location, complete, uid) {
     var locations;
     if (typeof keyOrLocations === "string" && keyOrLocations.length !== 0) {
       // If this is a set for a single location, convert it into a object
@@ -103,7 +103,7 @@ var JeoFire = function(firebaseRef) {
         validateLocation(location);
 
         var jeohash = encodeJeohash(location);
-        newData[key] = encodeJeoFireObject(location, jeohash);
+        newData[key] = encodeJeoFireObject(location, jeohash, complete, uid);
       }
     });
 
@@ -614,13 +614,15 @@ var jeohashQueries = function(center, radius) {
  * @param {string} jeohash The jeohash of the location.
  * @return {Object} The location encoded as JeoFire object.
  */
-function encodeJeoFireObject(location, jeohash) {
+function encodeJeoFireObject(location, jeohash, complete, uid) {
   validateLocation(location);
   validateJeohash(jeohash);
   return {
     ".priority": jeohash,
     "g": jeohash,
-    "l": location
+    "l": location,
+    "c": complete,
+    "u": uid
   };
 }
 
