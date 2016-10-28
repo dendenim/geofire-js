@@ -1,1 +1,1 @@
-This is a frok from GeoFire 4.3.0.
+This is a fork from GeoFire 4.3.0.
