@@ -30,8 +30,8 @@ var paths = {
     dest: {
       dir: "dist",
       files: {
-        unminified: "geofire.js",
-        minified: "geofire.min.js"
+        unminified: "jeofire.js",
+        minified: "jeofire.min.js"
       }
     }
   },
