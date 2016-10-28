@@ -1,14 +1,14 @@
 {
-  "name": "geofire",
+  "name": "jeofire",
   "description": "Location-based querying and filtering using Firebase",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "authors": [
     "Firebase (https://firebase.google.com/)"
   ],
-  "homepage": "https://github.com/firebase/geofire-js/",
+  "homepage": "https://github.com/dendenim/jeofire-js/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/firebase/geofire-js.git"
+    "url": "https://github.com/dendenim/jeofire-js.git"
   },
   "license": "MIT",
   "keywords": [
@@ -18,7 +18,7 @@
     "realtime",
     "geolocation"
   ],
-  "main": "dist/geofire.js",
+  "main": "dist/jeofire.js",
   "ignore": [
     "**/.*",
     "src",

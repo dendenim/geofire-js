@@ -1,11 +1,11 @@
 /**
- * Creates a GeoCallbackRegistration instance.
+ * Creates a JeoCallbackRegistration instance.
  *
  * @constructor
- * @this {GeoCallbackRegistration}
+ * @this {JeoCallbackRegistration}
  * @callback cancelCallback Callback to run when this callback registration is cancelled.
  */
-var GeoCallbackRegistration = function(cancelCallback) {
+var JeoCallbackRegistration = function(cancelCallback) {
   /********************/
   /*  PUBLIC METHODS  */
   /********************/

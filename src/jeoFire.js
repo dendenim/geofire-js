@@ -1,18 +1,18 @@
 /**
- * Creates a GeoFire instance.
+ * Creates a JeoFire instance.
  *
  * @constructor
- * @this {GeoFire}
- * @param {Firebase} firebaseRef A Firebase reference where the GeoFire data will be stored.
+ * @this {JeoFire}
+ * @param {Firebase} firebaseRef A Firebase reference where the JeoFire data will be stored.
  */
-var GeoFire = function(firebaseRef) {
+var JeoFire = function(firebaseRef) {
   /********************/
   /*  PUBLIC METHODS  */
   /********************/
   /**
-   * Returns the Firebase instance used to create this GeoFire instance.
+   * Returns the Firebase instance used to create this JeoFire instance.
    *
-   * @return {Firebase} The Firebase instance used to create this GeoFire instance.
+   * @return {Firebase} The Firebase instance used to create this JeoFire instance.
    */
   this.ref = function() {
     return _firebaseRef;
@@ -21,7 +21,7 @@ var GeoFire = function(firebaseRef) {
   /**
    * Adds the provided key - location pair(s) to Firebase. Returns an empty promise which is fulfilled when the write is complete.
    *
-   * If any provided key already exists in this GeoFire, it will be overwritten with the new location value.
+   * If any provided key already exists in this JeoFire, it will be overwritten with the new location value.
    *
    * @param {string|Object} keyOrLocations The key representing the location to add or a mapping of key - location pairs which
    * represent the locations to add.
@@ -55,8 +55,8 @@ var GeoFire = function(firebaseRef) {
       } else {
         validateLocation(location);
 
-        var geohash = encodeGeohash(location);
-        newData[key] = encodeGeoFireObject(location, geohash);
+        var jeohash = encodeJeohash(location);
+        newData[key] = encodeJeoFireObject(location, jeohash);
       }
     });
 
@@ -78,15 +78,15 @@ var GeoFire = function(firebaseRef) {
       if (snapshotVal === null) {
         return null;
       } else {
-        return decodeGeoFireObject(snapshotVal);
+        return decodeJeoFireObject(snapshotVal);
       }
     });
   };
 
   /**
-   * Removes the provided key from this GeoFire. Returns an empty promise fulfilled when the key has been removed.
+   * Removes the provided key from this JeoFire. Returns an empty promise fulfilled when the key has been removed.
    *
-   * If the provided key is not in this GeoFire, the promise will still successfully resolve.
+   * If the provided key is not in this JeoFire, the promise will still successfully resolve.
    *
    * @param {string} key The key of the location to remove.
    * @return {Promise.<string>} A promise that is fulfilled after the inputted key is removed.
@@ -96,13 +96,13 @@ var GeoFire = function(firebaseRef) {
   };
 
   /**
-   * Returns a new GeoQuery instance with the provided queryCriteria.
+   * Returns a new JeoQuery instance with the provided queryCriteria.
    *
-   * @param {Object} queryCriteria The criteria which specifies the GeoQuery's center and radius.
-   * @return {GeoQuery} A new GeoQuery object.
+   * @param {Object} queryCriteria The criteria which specifies the JeoQuery's center and radius.
+   * @return {JeoQuery} A new JeoQuery object.
    */
   this.query = function(queryCriteria) {
-    return new GeoQuery(_firebaseRef, queryCriteria);
+    return new JeoQuery(_firebaseRef, queryCriteria);
   };
 
   /*****************/
@@ -124,7 +124,7 @@ var GeoFire = function(firebaseRef) {
  * @param {Array.<number>} location2 The [latitude, longitude] pair of the second location.
  * @return {number} The distance, in kilometers, between the inputted locations.
  */
-GeoFire.distance = function(location1, location2) {
+JeoFire.distance = function(location1, location2) {
   validateLocation(location1);
   validateLocation(location2);
 

@@ -1,7 +1,7 @@
-  return GeoFire;
+  return JeoFire;
 })();
 
-// Export GeoFire if this is being run in node
+// Export JeoFire if this is being run in node
 if (typeof module !== "undefined" && typeof process !== "undefined") {
-  module.exports = GeoFire;
+  module.exports = JeoFire;
 }

@@ -10,13 +10,13 @@ var validKeys = ["a", "loc1", "(e@Xi:4t>*E2)hc<5oa:1s6{B0d?u", Array(700).join("
 var invalidKeys = ["", true, false, null, undefined, {a: 1}, "loc.1", "loc$1", "[loc1", "loc1]", "loc#1", "loc/1", "a#i]$da[s", "te/nst", "te/rst", "te/u0000st", "te/u0015st", "te/007Fst", Array(800).join("a")];
 var validLocations = [[0, 0], [-90, 180], [90, -180], [23, 74], [47.235124363, 127.2379654226]];
 var invalidLocations = [[-91, 0], [91, 0], [0, 181], [0, -181], [[0, 0], 0], ["a", 0], [0, "a"], ["a", "a"], [NaN, 0], [0, NaN], [undefined, NaN], [null, 0], [null, null], [0, undefined], [undefined, undefined], "", "a", true, false, [], [1], {}, {a:1}, null, undefined, NaN];
-var validGeohashes = ["4", "d62dtu", "000000000000"];
-var invalidGeohashes = ["", "aaa", 1, true, false, [], [1], {}, {a:1}, null, undefined, NaN];
+var validJeohashes = ["4", "d62dtu", "000000000000"];
+var invalidJeohashes = ["", "aaa", 1, true, false, [], [1], {}, {a:1}, null, undefined, NaN];
 var validQueryCriterias = [{center: [0,0], radius: 1000}, {center: [1,-180], radius: 1.78}, {center: [22.22,-107.77], radius: 0}, {center: [0,0]}, {center: [1,-180]}, {center: [22.22,-107.77]}, {radius: 1000}, {radius: 1.78}, {radius: 0}];
 var invalidQueryCriterias = [{}, {random: 100}, {center: [91,2], radius: 1000, random: "a"}, {center: [91,2], radius: 1000}, {center: [1,-181], radius: 1000}, {center: ["a",2], radius: 1000}, {center: [1,[1,2]], radius: 1000}, {center: [0,0], radius: -1}, {center: [null,2], radius: 1000}, {center: [1,undefined], radius: 1000}, {center: [NaN,0], radius: 1000}, {center: [1,2], radius: -10}, {center: [1,2], radius: "text"}, {center: [1,2], radius: [1,2]}, {center: [1,2], radius: null}, true, false, undefined, NaN, [], "a", 1];
 
-// Create global variables to hold the Firebase and GeoFire variables
-var geoFireRef, geoFire, geoQueries = [];
+// Create global variables to hold the Firebase and JeoFire variables
+var jeoFireRef, jeoFire, jeoQueries = [];
 
 // Initialize Firebase
 var config = {
@@ -31,25 +31,25 @@ firebase.initializeApp(config);
 /* Helper function which runs before each Jasmine test has started */
 function beforeEachHelper(done) {
   // Create a new Firebase database ref at a random node
-  geoFireRef = firebase.database().ref().push();
+  jeoFireRef = firebase.database().ref().push();
 
-  // Create a new GeoFire instance
-  geoFire = new GeoFire(geoFireRef);
+  // Create a new JeoFire instance
+  jeoFire = new JeoFire(jeoFireRef);
 
-  // Reset the GeoQueries
-  geoQueries = [];
+  // Reset the JeoQueries
+  jeoQueries = [];
 
   done();
 }
 
 /* Helper function which runs after each Jasmine test has completed */
 function afterEachHelper(done) {
-  // Cancel each outstanding GeoQuery
-  geoQueries.forEach(function(geoQuery) {
-    geoQuery.cancel();
+  // Cancel each outstanding JeoQuery
+  jeoQueries.forEach(function(jeoQuery) {
+    jeoQuery.cancel();
   })
 
-  geoFireRef.remove().then(function() {
+  jeoFireRef.remove().then(function() {
     // Wait for 50 milliseconds after each test to give enough time for old query events to expire
     return wait(50);
   }).then(done);
@@ -70,7 +70,7 @@ function generateRandomString() {
 
 /* Returns the current data in the Firebase */
 function getFirebaseData() {
-  return geoFireRef.once("value").then(function(dataSnapshot) {
+  return jeoFireRef.once("value").then(function(dataSnapshot) {
     return dataSnapshot.exportVal();
   });
 };

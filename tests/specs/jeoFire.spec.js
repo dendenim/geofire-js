@@ -1,4 +1,4 @@
-describe("GeoFire Tests:", function() {
+describe("JeoFire Tests:", function() {
   // Reset the Firebase before each test
   beforeEach(function(done) {
     beforeEachHelper(done);
@@ -11,18 +11,18 @@ describe("GeoFire Tests:", function() {
   describe("Constructor:", function() {
     it("Constructor throws errors given invalid Firebase references", function() {
       invalidFirebaseRefs.forEach(function(invalidFirebaseRef) {
-        expect(function() { new GeoFire(invalidFirebaseRef); }).toThrow();
+        expect(function() { new JeoFire(invalidFirebaseRef); }).toThrow();
       });
     });
 
     it("Constructor does not throw errors given valid Firebase references", function() {
-      expect(function() { new GeoFire(geoFireRef); }).not.toThrow();
+      expect(function() { new JeoFire(jeoFireRef); }).not.toThrow();
     });
   });
 
   describe("ref():", function() {
-    it("ref() returns the Firebase reference used to create a GeoFire instance", function() {
-      expect(geoFire.ref()).toBe(geoFireRef);
+    it("ref() returns the Firebase reference used to create a JeoFire instance", function() {
+      expect(jeoFire.ref()).toBe(jeoFireRef);
     });
   });
 
@@ -31,7 +31,7 @@ describe("GeoFire Tests:", function() {
 
       var cl = new Checklist(["p1"], expect, done);
 
-      geoFire.set("loc1", [0, 0]).then(function() {
+      jeoFire.set("loc1", [0, 0]).then(function() {
         cl.x("p1");
       });
     });
@@ -39,14 +39,14 @@ describe("GeoFire Tests:", function() {
     it("set() updates Firebase when adding new locations", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4"], expect, done);
 
-      geoFire.set("loc1", [0, 0]).then(function() {
+      jeoFire.set("loc1", [0, 0]).then(function() {
         cl.x("p1");
 
-        return geoFire.set("loc2", [50, 50]);
+        return jeoFire.set("loc2", [50, 50]);
       }).then(function() {
         cl.x("p2");
 
-        return geoFire.set("loc3", [-90, -90]);
+        return jeoFire.set("loc3", [-90, -90]);
       }).then(function() {
         cl.x("p3");
 
@@ -65,14 +65,14 @@ describe("GeoFire Tests:", function() {
     it("set() handles decimal latitudes and longitudes", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4"], expect, done);
 
-      geoFire.set("loc1", [0.254, 0]).then(function() {
+      jeoFire.set("loc1", [0.254, 0]).then(function() {
         cl.x("p1");
 
-        return geoFire.set("loc2", [50, 50.293403]);
+        return jeoFire.set("loc2", [50, 50.293403]);
       }).then(function() {
         cl.x("p2");
 
-        return geoFire.set("loc3", [-82.614, -90.938]);
+        return jeoFire.set("loc3", [-82.614, -90.938]);
       }).then(function() {
         cl.x("p3");
 
@@ -91,18 +91,18 @@ describe("GeoFire Tests:", function() {
     it("set() updates Firebase when changing a pre-existing key", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4", "p5"], expect, done);
 
-      geoFire.set("loc1", [0, 0]).then(function() {
+      jeoFire.set("loc1", [0, 0]).then(function() {
         cl.x("p1");
 
-        return geoFire.set("loc2", [50, 50]);
+        return jeoFire.set("loc2", [50, 50]);
       }).then(function() {
         cl.x("p2");
 
-        return geoFire.set("loc3", [-90, -90]);
+        return jeoFire.set("loc3", [-90, -90]);
       }).then(function() {
         cl.x("p3");
 
-        return geoFire.set("loc1", [2, 3]);
+        return jeoFire.set("loc1", [2, 3]);
       }).then(function() {
         cl.x("p4");
 
@@ -121,18 +121,18 @@ describe("GeoFire Tests:", function() {
     it("set() updates Firebase when changing a pre-existing key to the same location", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4", "p5"], expect, done);
 
-      geoFire.set("loc1", [0, 0]).then(function() {
+      jeoFire.set("loc1", [0, 0]).then(function() {
         cl.x("p1");
 
-        return geoFire.set("loc2", [50, 50]);
+        return jeoFire.set("loc2", [50, 50]);
       }).then(function() {
         cl.x("p2");
 
-        return geoFire.set("loc3", [-90, -90]);
+        return jeoFire.set("loc3", [-90, -90]);
       }).then(function() {
         cl.x("p3");
 
-        return geoFire.set("loc1", [0, 0]);
+        return jeoFire.set("loc1", [0, 0]);
       }).then(function() {
         cl.x("p4");
 
@@ -151,14 +151,14 @@ describe("GeoFire Tests:", function() {
     it("set() handles multiple keys at the same location", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4"], expect, done);
 
-      geoFire.set("loc1", [0, 0]).then(function() {
+      jeoFire.set("loc1", [0, 0]).then(function() {
         cl.x("p1");
 
-        return geoFire.set("loc2", [0, 0]);
+        return jeoFire.set("loc2", [0, 0]);
       }).then(function() {
         cl.x("p2");
 
-        return geoFire.set("loc3", [0, 0]);
+        return jeoFire.set("loc3", [0, 0]);
       }).then(function() {
         cl.x("p3");
 
@@ -177,42 +177,42 @@ describe("GeoFire Tests:", function() {
     it("set() updates Firebase after complex operations", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9", "p10", "p11"], expect, done);
 
-      geoFire.set("loc:1", [0, 0]).then(function() {
+      jeoFire.set("loc:1", [0, 0]).then(function() {
         cl.x("p1");
 
-        return geoFire.set("loc2", [50, 50]);
+        return jeoFire.set("loc2", [50, 50]);
       }).then(function() {
         cl.x("p2");
 
-        return geoFire.set("loc%!A72f()3", [-90, -90]);
+        return jeoFire.set("loc%!A72f()3", [-90, -90]);
       }).then(function() {
         cl.x("p3");
 
-        return geoFire.remove("loc2");
+        return jeoFire.remove("loc2");
       }).then(function() {
         cl.x("p4");
 
-        return geoFire.set("loc2", [0.2358, -72.621]);
+        return jeoFire.set("loc2", [0.2358, -72.621]);
       }).then(function() {
         cl.x("p5");
 
-        return geoFire.set("loc4", [87.6, -130]);
+        return jeoFire.set("loc4", [87.6, -130]);
       }).then(function() {
         cl.x("p6");
 
-        return geoFire.set("loc5", [5, 55.555]);
+        return jeoFire.set("loc5", [5, 55.555]);
       }).then(function() {
         cl.x("p7");
 
-        return geoFire.set("loc5", null);
+        return jeoFire.set("loc5", null);
       }).then(function() {
         cl.x("p8");
 
-        return geoFire.set("loc:1", [87.6, -130]);
+        return jeoFire.set("loc:1", [87.6, -130]);
       }).then(function() {
         cl.x("p9");
 
-        return geoFire.set("loc6", [-72.258, 0.953215]);
+        return jeoFire.set("loc6", [-72.258, 0.953215]);
       }).then(function() {
         cl.x("p10");
 
@@ -233,7 +233,7 @@ describe("GeoFire Tests:", function() {
     it("set() does not throw errors given valid keys", function() {
       validKeys.forEach(function(validKey) {
         expect(function() {
-          geoFire.set(validKey, [0, 0]);
+          jeoFire.set(validKey, [0, 0]);
         }).not.toThrow();
       });
     });
@@ -241,7 +241,7 @@ describe("GeoFire Tests:", function() {
     it("set() throws errors given invalid keys", function() {
       invalidKeys.forEach(function(invalidKey) {
         expect(function() {
-          geoFire.set(invalidKey, [0, 0]);
+          jeoFire.set(invalidKey, [0, 0]);
         }).toThrow();
       });
     });
@@ -249,7 +249,7 @@ describe("GeoFire Tests:", function() {
     it("set() does not throw errors given valid locations", function() {
       validLocations.forEach(function(validLocation, i) {
         expect(function() {
-          geoFire.set("loc", validLocation);
+          jeoFire.set("loc", validLocation);
         }).not.toThrow();
       });
     });
@@ -259,7 +259,7 @@ describe("GeoFire Tests:", function() {
         // Setting location to null is valid since it will remove the key
         if (invalidLocation !== null) {
           expect(function() {
-            geoFire.set("loc", invalidLocation);
+            jeoFire.set("loc", invalidLocation);
           }).toThrow();
         }
       });
@@ -271,7 +271,7 @@ describe("GeoFire Tests:", function() {
 
       var cl = new Checklist(["p1"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc1": [0, 0]
       }).then(function() {
         cl.x("p1");
@@ -281,7 +281,7 @@ describe("GeoFire Tests:", function() {
     it("set() updates Firebase when adding new locations", function(done) {
       var cl = new Checklist(["p1", "p2"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc1": [0, 0],
         "loc2": [50, 50],
         "loc3": [-90, -90]
@@ -303,7 +303,7 @@ describe("GeoFire Tests:", function() {
     it("set() handles decimal latitudes and longitudes", function(done) {
       var cl = new Checklist(["p1", "p2"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc1": [0.254, 0],
         "loc2": [50, 50.293403],
         "loc3": [-82.614, -90.938]
@@ -325,14 +325,14 @@ describe("GeoFire Tests:", function() {
     it("set() updates Firebase when changing a pre-existing key", function(done) {
       var cl = new Checklist(["p1", "p2", "p3"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc1": [0, 0],
         "loc2": [50, 50],
         "loc3": [-90, -90]
       }).then(function() {
         cl.x("p1");
 
-        return geoFire.set({
+        return jeoFire.set({
           "loc1": [2, 3]
         });
       }).then(function() {
@@ -353,14 +353,14 @@ describe("GeoFire Tests:", function() {
     it("set() updates Firebase when changing a pre-existing key to the same location", function(done) {
       var cl = new Checklist(["p1", "p2", "p3"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc1": [0, 0],
         "loc2": [50, 50],
         "loc3": [-90, -90]
       }).then(function() {
         cl.x("p1");
 
-        return geoFire.set({
+        return jeoFire.set({
           "loc1": [0, 0]
         });
       }).then(function() {
@@ -381,7 +381,7 @@ describe("GeoFire Tests:", function() {
     it("set() handles multiple keys at the same location", function(done) {
       var cl = new Checklist(["p1", "p2"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc1": [0, 0],
         "loc2": [0, 0],
         "loc3": [0, 0]
@@ -403,18 +403,18 @@ describe("GeoFire Tests:", function() {
     it("set() updates Firebase after complex operations", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4", "p5", "p6"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc:1": [0, 0],
         "loc2": [50, 50],
         "loc%!A72f()3": [-90, -90]
       }).then(function() {
         cl.x("p1");
 
-        return geoFire.remove("loc2");
+        return jeoFire.remove("loc2");
       }).then(function() {
         cl.x("p2");
 
-        return geoFire.set({
+        return jeoFire.set({
           "loc2": [0.2358, -72.621],
           "loc4": [87.6, -130],
           "loc5": [5, 55.555]
@@ -422,13 +422,13 @@ describe("GeoFire Tests:", function() {
       }).then(function() {
         cl.x("p3");
 
-        return geoFire.set({
+        return jeoFire.set({
           "loc5": null
         });
       }).then(function() {
         cl.x("p4");
 
-        return geoFire.set({
+        return jeoFire.set({
           "loc:1": [87.6, -130],
           "loc6": [-72.258, 0.953215]
         });
@@ -454,7 +454,7 @@ describe("GeoFire Tests:", function() {
         expect(function() {
           var locations = {};
           locations[validKey] = [0, 0];
-          geoFire.set(locations);
+          jeoFire.set(locations);
         }).not.toThrow();
       });
     });
@@ -465,7 +465,7 @@ describe("GeoFire Tests:", function() {
           expect(function() {
               var locations = {};
               locations[invalidKey] = [0, 0];
-              geoFire.set(locations);
+              jeoFire.set(locations);
           }).toThrow();
         }
       });
@@ -473,7 +473,7 @@ describe("GeoFire Tests:", function() {
 
     it("set() throws errors given a location argument in combination with an object", function() {
       expect(function() {
-        geoFire.set({
+        jeoFire.set({
           "loc": [0, 0]
         }, [0, 0]);
       }).toThrow();
@@ -482,7 +482,7 @@ describe("GeoFire Tests:", function() {
     it("set() does not throw errors given valid locations", function() {
       validLocations.forEach(function(validLocation, i) {
         expect(function() {
-          geoFire.set({
+          jeoFire.set({
             "loc": validLocation
           });
         }).not.toThrow();
@@ -494,7 +494,7 @@ describe("GeoFire Tests:", function() {
         // Setting location to null is valid since it will remove the key
         if (invalidLocation !== null) {
           expect(function() {
-            geoFire.set({
+            jeoFire.set({
               "loc": invalidLocation
             });
           }).toThrow();
@@ -507,7 +507,7 @@ describe("GeoFire Tests:", function() {
     it("get() returns a promise", function(done) {
       var cl = new Checklist(["p1"], expect, done);
 
-      geoFire.get("loc1").then(function() {
+      jeoFire.get("loc1").then(function() {
         cl.x("p1");
       });
     });
@@ -515,7 +515,7 @@ describe("GeoFire Tests:", function() {
     it("get() returns null for non-existent keys", function(done) {
       var cl = new Checklist(["p1"], expect, done);
 
-      geoFire.get("loc1").then(function(location) {
+      jeoFire.get("loc1").then(function(location) {
         expect(location).toBeNull();
 
         cl.x("p1");
@@ -525,24 +525,24 @@ describe("GeoFire Tests:", function() {
     it("get() retrieves locations given existing keys", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc1": [0, 0],
         "loc2": [50, 50],
         "loc3": [-90, -90]
       }).then(function() {
         cl.x("p1");
 
-        return geoFire.get("loc1");
+        return jeoFire.get("loc1");
       }).then(function(location) {
         expect(location).toEqual([0, 0]);
         cl.x("p2");
 
-        return geoFire.get("loc2");
+        return jeoFire.get("loc2");
       }).then(function(location) {
         expect(location).toEqual([50, 50]);
         cl.x("p3");
 
-        return geoFire.get("loc3");
+        return jeoFire.get("loc3");
       }).then(function(location) {
         expect(location).toEqual([-90, -90]);
         cl.x("p4");
@@ -551,13 +551,13 @@ describe("GeoFire Tests:", function() {
 
     it("get() does not throw errors given valid keys", function() {
       validKeys.forEach(function(validKey) {
-        expect(function() { geoFire.get(validKey); }).not.toThrow();
+        expect(function() { jeoFire.get(validKey); }).not.toThrow();
       });
     });
 
     it("get() throws errors given invalid keys", function() {
       invalidKeys.forEach(function(invalidKey) {
-        expect(function() { geoFire.get(invalidKey); }).toThrow();
+        expect(function() { jeoFire.get(invalidKey); }).toThrow();
       });
     });
   });
@@ -566,23 +566,23 @@ describe("GeoFire Tests:", function() {
     it("set() removes existing location given null", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4", "p5"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc1": [0, 0],
         "loc2": [2, 3]
       }).then(function() {
         cl.x("p1");
 
-        return geoFire.get("loc1");
+        return jeoFire.get("loc1");
       }).then(function(location) {
         expect(location).toEqual([0, 0]);
 
         cl.x("p2");
 
-        return geoFire.set("loc1", null);
+        return jeoFire.set("loc1", null);
       }).then(function() {
         cl.x("p3");
 
-        return geoFire.get("loc1");
+        return jeoFire.get("loc1");
       }).then(function(location) {
         expect(location).toBeNull();
 
@@ -601,20 +601,20 @@ describe("GeoFire Tests:", function() {
     it("set() does nothing given a non-existent location and null", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4", "p5"], expect, done);
 
-      geoFire.set("loc1", [0, 0]).then(function() {
+      jeoFire.set("loc1", [0, 0]).then(function() {
         cl.x("p1");
 
-        return geoFire.get("loc1");
+        return jeoFire.get("loc1");
       }).then(function(location) {
         expect(location).toEqual([0, 0]);
 
         cl.x("p2");
 
-        return geoFire.set("loc2", null);
+        return jeoFire.set("loc2", null);
       }).then(function() {
         cl.x("p3");
 
-        return geoFire.get("loc2");
+        return jeoFire.get("loc2");
       }).then(function(location) {
         expect(location).toBeNull();
 
@@ -633,26 +633,26 @@ describe("GeoFire Tests:", function() {
     it("set() removes existing location given null", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4", "p5"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc1": [0, 0],
         "loc2": [2, 3]
       }).then(function() {
         cl.x("p1");
 
-        return geoFire.get("loc1");
+        return jeoFire.get("loc1");
       }).then(function(location) {
         expect(location).toEqual([0, 0]);
 
         cl.x("p2");
 
-        return geoFire.set({
+        return jeoFire.set({
           "loc1": null,
           "loc3": [-90, -90]
         });
       }).then(function() {
         cl.x("p3");
 
-        return geoFire.get("loc1");
+        return jeoFire.get("loc1");
       }).then(function(location) {
         expect(location).toBeNull();
 
@@ -672,19 +672,19 @@ describe("GeoFire Tests:", function() {
     it("set() does nothing given a non-existent location and null", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc1": [0, 0],
         "loc2": null
       }).then(function() {
         cl.x("p1");
 
-        return geoFire.get("loc1");
+        return jeoFire.get("loc1");
       }).then(function(location) {
         expect(location).toEqual([0, 0]);
 
         cl.x("p2");
 
-        return geoFire.get("loc2");
+        return jeoFire.get("loc2");
       }).then(function(location) {
         expect(location).toBeNull();
 
@@ -703,23 +703,23 @@ describe("GeoFire Tests:", function() {
     it("remove() removes existing location", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4", "p5"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc:^%*1": [0, 0],
         "loc2": [2, 3]
       }).then(function() {
         cl.x("p1");
 
-        return geoFire.get("loc:^%*1");
+        return jeoFire.get("loc:^%*1");
       }).then(function(location) {
         expect(location).toEqual([0, 0]);
 
         cl.x("p2");
 
-        return geoFire.remove("loc:^%*1");
+        return jeoFire.remove("loc:^%*1");
       }).then(function() {
         cl.x("p3");
 
-        return geoFire.get("loc:^%*1");
+        return jeoFire.get("loc:^%*1");
       }).then(function(location) {
         expect(location).toBeNull();
 
@@ -738,20 +738,20 @@ describe("GeoFire Tests:", function() {
     it("remove() does nothing given a non-existent location", function(done) {
       var cl = new Checklist(["p1", "p2", "p3", "p4", "p5"], expect, done);
 
-      geoFire.set("loc1", [0, 0]).then(function() {
+      jeoFire.set("loc1", [0, 0]).then(function() {
         cl.x("p1");
 
-        return geoFire.get("loc1");
+        return jeoFire.get("loc1");
       }).then(function(location) {
         expect(location).toEqual([0, 0]);
 
         cl.x("p2");
 
-        return geoFire.remove("loc2");
+        return jeoFire.remove("loc2");
       }).then(function() {
         cl.x("p3");
 
-        return geoFire.get("loc2");
+        return jeoFire.get("loc2");
       }).then(function(location) {
         expect(location).toBeNull();
 
@@ -770,14 +770,14 @@ describe("GeoFire Tests:", function() {
     it("remove() only removes one key if multiple keys are at the same location", function(done) {
       var cl = new Checklist(["p1", "p2", "p3"], expect, done);
 
-      geoFire.set({
+      jeoFire.set({
         "loc1": [0, 0],
         "loc2": [2, 3],
         "loc3": [0, 0]
       }).then(function() {
         cl.x("p1");
 
-        return geoFire.remove("loc1");
+        return jeoFire.remove("loc1");
       }).then(function() {
         cl.x("p2");
 
@@ -794,35 +794,35 @@ describe("GeoFire Tests:", function() {
 
     it("remove() does not throw errors given valid keys", function() {
       validKeys.forEach(function(validKey) {
-        expect(function() { geoFire.remove(validKey); }).not.toThrow();
+        expect(function() { jeoFire.remove(validKey); }).not.toThrow();
       });
     });
 
     it("remove() throws errors given invalid keys", function() {
       invalidKeys.forEach(function(invalidKey) {
-        expect(function() { geoFire.remove(invalidKey); }).toThrow();
+        expect(function() { jeoFire.remove(invalidKey); }).toThrow();
       });
     });
   });
 
   describe("query():", function() {
-    it("query() returns GeoQuery instance", function() {
-      geoQueries.push(geoFire.query({center: [1,2], radius: 1000}));
+    it("query() returns JeoQuery instance", function() {
+      jeoQueries.push(jeoFire.query({center: [1,2], radius: 1000}));
 
-      expect(geoQueries[0] instanceof GeoQuery).toBeTruthy();
+      expect(jeoQueries[0] instanceof JeoQuery).toBeTruthy();
     });
 
     it("query() does not throw errors given valid query criteria", function() {
       validQueryCriterias.forEach(function(validQueryCriteria) {
         if (typeof validQueryCriteria.center !== "undefined" && typeof validQueryCriteria.radius !== "undefined") {
-          expect(function() { geoFire.query(validQueryCriteria); }).not.toThrow();
+          expect(function() { jeoFire.query(validQueryCriteria); }).not.toThrow();
         }
       });
     });
 
     it("query() throws errors given invalid query criteria", function() {
       invalidQueryCriterias.forEach(function(invalidQueryCriteria) {
-        expect(function() { geoFire.query(invalidQueryCriteria); }).toThrow();
+        expect(function() { jeoFire.query(invalidQueryCriteria); }).toThrow();
       });
     });
   });

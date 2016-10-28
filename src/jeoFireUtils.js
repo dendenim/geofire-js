@@ -1,7 +1,7 @@
-// Default geohash length
+// Default jeohash length
 var g_GEOHASH_PRECISION = 10;
 
-// Characters used in location geohashes
+// Characters used in location jeohashes
 var g_BASE32 = "0123456789bcdefghjkmnpqrstuvwxyz";
 
 // The meridional circumference of the earth in meters
@@ -10,10 +10,10 @@ var g_EARTH_MERI_CIRCUMFERENCE = 40007860;
 // Length of a degree latitude at the equator
 var g_METERS_PER_DEGREE_LATITUDE = 110574;
 
-// Number of bits per geohash character
+// Number of bits per jeohash character
 var g_BITS_PER_CHAR = 5;
 
-// Maximum length of a geohash in bits
+// Maximum length of a jeohash in bits
 var g_MAXIMUM_BITS_PRECISION = 22*g_BITS_PER_CHAR;
 
 // Equatorial radius of the earth in meters
@@ -49,7 +49,7 @@ var validateKey = function(key) {
   }
   else if (1 + g_GEOHASH_PRECISION + key.length > 755) {
     // Firebase can only stored child paths up to 768 characters
-    // The child path for this key is at the least: "i/<geohash>key"
+    // The child path for this key is at the least: "i/<jeohash>key"
     error = "key is too long to be stored in Firebase";
   }
   else if (/[\[\].#$\/\u0000-\u001F\u007F]/.test(key)) {
@@ -58,7 +58,7 @@ var validateKey = function(key) {
   }
 
   if (typeof error !== "undefined") {
-    throw new Error("Invalid GeoFire key '" + key + "': " + error);
+    throw new Error("Invalid JeoFire key '" + key + "': " + error);
   }
 };
 
@@ -95,34 +95,34 @@ var validateLocation = function(location) {
   }
 
   if (typeof error !== "undefined") {
-    throw new Error("Invalid GeoFire location '" + location + "': " + error);
+    throw new Error("Invalid JeoFire location '" + location + "': " + error);
   }
 };
 
 /**
- * Validates the inputted geohash and throws an error if it is invalid.
+ * Validates the inputted jeohash and throws an error if it is invalid.
  *
- * @param {string} geohash The geohash to be validated.
+ * @param {string} jeohash The jeohash to be validated.
  */
-var validateGeohash = function(geohash) {
+var validateJeohash = function(jeohash) {
   var error;
 
-  if (typeof geohash !== "string") {
-    error = "geohash must be a string";
+  if (typeof jeohash !== "string") {
+    error = "jeohash must be a string";
   }
-  else if (geohash.length === 0) {
-    error = "geohash cannot be the empty string";
+  else if (jeohash.length === 0) {
+    error = "jeohash cannot be the empty string";
   }
   else {
-    for (var i = 0, length = geohash.length; i < length; ++i) {
-      if (g_BASE32.indexOf(geohash[i]) === -1) {
-        error = "geohash cannot contain \"" + geohash[i] + "\"";
+    for (var i = 0, length = jeohash.length; i < length; ++i) {
+      if (g_BASE32.indexOf(jeohash[i]) === -1) {
+        error = "jeohash cannot contain \"" + jeohash[i] + "\"";
       }
     }
   }
 
   if (typeof error !== "undefined") {
-    throw new Error("Invalid GeoFire geohash '" + geohash + "': " + error);
+    throw new Error("Invalid JeoFire jeohash '" + jeohash + "': " + error);
   }
 };
 
@@ -183,15 +183,15 @@ var degreesToRadians = function(degrees) {
 };
 
 /**
- * Generates a geohash of the specified precision/string length from the  [latitude, longitude]
+ * Generates a jeohash of the specified precision/string length from the  [latitude, longitude]
  * pair, specified as an array.
  *
- * @param {Array.<number>} location The [latitude, longitude] pair to encode into a geohash.
- * @param {number=} precision The length of the geohash to create. If no precision is
+ * @param {Array.<number>} location The [latitude, longitude] pair to encode into a jeohash.
+ * @param {number=} precision The length of the jeohash to create. If no precision is
  * specified, the global default is used.
- * @return {string} The geohash of the inputted location.
+ * @return {string} The jeohash of the inputted location.
  */
-var encodeGeohash = function(location, precision) {
+var encodeJeohash = function(location, precision) {
   validateLocation(location);
   if (typeof precision !== "undefined") {
     if (typeof precision !== "number" || isNaN(precision)) {
@@ -316,12 +316,12 @@ var wrapLongitude = function(longitude) {
 };
 
 /**
- * Calculates the maximum number of bits of a geohash to get a bounding box that is larger than a
+ * Calculates the maximum number of bits of a jeohash to get a bounding box that is larger than a
  * given size at the given coordinate.
  *
  * @param {Array.<number>} coordinate The coordinate as a [latitude, longitude] pair.
  * @param {number} size The size of the bounding box.
- * @return {number} The number of bits necessary for the geohash.
+ * @return {number} The number of bits necessary for the jeohash.
  */
 var boundingBoxBits = function(coordinate, size) {
   var latDeltaDegrees = size/g_METERS_PER_DEGREE_LATITUDE;
@@ -335,8 +335,8 @@ var boundingBoxBits = function(coordinate, size) {
 
 /**
  * Calculates eight points on the bounding box and the center of a given circle. At least one
- * geohash of these nine coordinates, truncated to a precision of at most radius, are guaranteed
- * to be prefixes of any geohash that lies within the circle.
+ * jeohash of these nine coordinates, truncated to a precision of at most radius, are guaranteed
+ * to be prefixes of any jeohash that lies within the circle.
  *
  * @param {Array.<number>} center The center given as [latitude, longitude].
  * @param {number} radius The radius of the circle.
@@ -363,21 +363,21 @@ var boundingBoxCoordinates = function(center, radius) {
 };
 
 /**
- * Calculates the bounding box query for a geohash with x bits precision.
+ * Calculates the bounding box query for a jeohash with x bits precision.
  *
- * @param {string} geohash The geohash whose bounding box query to generate.
+ * @param {string} jeohash The jeohash whose bounding box query to generate.
  * @param {number} bits The number of bits of precision.
- * @return {Array.<string>} A [start, end] pair of geohashes.
+ * @return {Array.<string>} A [start, end] pair of jeohashes.
  */
-var geohashQuery = function(geohash, bits) {
-  validateGeohash(geohash);
+var jeohashQuery = function(jeohash, bits) {
+  validateJeohash(jeohash);
   var precision = Math.ceil(bits/g_BITS_PER_CHAR);
-  if (geohash.length < precision) {
-    return [geohash, geohash+"~"];
+  if (jeohash.length < precision) {
+    return [jeohash, jeohash+"~"];
   }
-  geohash = geohash.substring(0, precision);
-  var base = geohash.substring(0, geohash.length - 1);
-  var lastValue = g_BASE32.indexOf(geohash.charAt(geohash.length - 1));
+  jeohash = jeohash.substring(0, precision);
+  var base = jeohash.substring(0, jeohash.length - 1);
+  var lastValue = g_BASE32.indexOf(jeohash.charAt(jeohash.length - 1));
   var significantBits = bits - (base.length*g_BITS_PER_CHAR);
   var unusedBits = (g_BITS_PER_CHAR - significantBits);
   /*jshint bitwise: false*/
@@ -395,19 +395,19 @@ var geohashQuery = function(geohash, bits) {
 
 /**
  * Calculates a set of queries to fully contain a given circle. A query is a [start, end] pair
- * where any geohash is guaranteed to be lexiographically larger then start and smaller than end.
+ * where any jeohash is guaranteed to be lexiographically larger then start and smaller than end.
  *
  * @param {Array.<number>} center The center given as [latitude, longitude] pair.
  * @param {number} radius The radius of the circle.
- * @return {Array.<Array.<string>>} An array of geohashes containing a [start, end] pair.
+ * @return {Array.<Array.<string>>} An array of jeohashes containing a [start, end] pair.
  */
-var geohashQueries = function(center, radius) {
+var jeohashQueries = function(center, radius) {
   validateLocation(center);
   var queryBits = Math.max(1, boundingBoxBits(center, radius));
-  var geohashPrecision = Math.ceil(queryBits/g_BITS_PER_CHAR);
+  var jeohashPrecision = Math.ceil(queryBits/g_BITS_PER_CHAR);
   var coordinates = boundingBoxCoordinates(center, radius);
   var queries = coordinates.map(function(coordinate) {
-    return geohashQuery(encodeGeohash(coordinate, geohashPrecision), queryBits);
+    return jeohashQuery(encodeJeohash(coordinate, jeohashPrecision), queryBits);
   });
   // remove duplicates
   return queries.filter(function(query, index) {
@@ -418,34 +418,34 @@ var geohashQueries = function(center, radius) {
 };
 
 /**
- * Encodes a location and geohash as a GeoFire object.
+ * Encodes a location and jeohash as a JeoFire object.
  *
  * @param {Array.<number>} location The location as [latitude, longitude] pair.
- * @param {string} geohash The geohash of the location.
- * @return {Object} The location encoded as GeoFire object.
+ * @param {string} jeohash The jeohash of the location.
+ * @return {Object} The location encoded as JeoFire object.
  */
-function encodeGeoFireObject(location, geohash) {
+function encodeJeoFireObject(location, jeohash) {
   validateLocation(location);
-  validateGeohash(geohash);
+  validateJeohash(jeohash);
   return {
-    ".priority": geohash,
-    "g": geohash,
+    ".priority": jeohash,
+    "g": jeohash,
     "l": location
   };
 }
 
 /**
- * Decodes the location given as GeoFire object. Returns null if decoding fails.
+ * Decodes the location given as JeoFire object. Returns null if decoding fails.
  *
- * @param {Object} geoFireObj The location encoded as GeoFire object.
+ * @param {Object} jeoFireObj The location encoded as JeoFire object.
  * @return {?Array.<number>} location The location as [latitude, longitude] pair or null if
  * decoding fails.
  */
-function decodeGeoFireObject(geoFireObj) {
-  if (geoFireObj !== null && geoFireObj.hasOwnProperty("l") && Array.isArray(geoFireObj.l) && geoFireObj.l.length === 2) {
-    return geoFireObj.l;
+function decodeJeoFireObject(jeoFireObj) {
+  if (jeoFireObj !== null && jeoFireObj.hasOwnProperty("l") && Array.isArray(jeoFireObj.l) && jeoFireObj.l.length === 2) {
+    return jeoFireObj.l;
   } else {
-    throw new Error("Unexpected GeoFire location object encountered: " + JSON.stringify(geoFireObj));
+    throw new Error("Unexpected JeoFire location object encountered: " + JSON.stringify(jeoFireObj));
   }
 }
 
