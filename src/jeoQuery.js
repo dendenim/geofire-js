@@ -18,13 +18,13 @@ var JeoQuery = function (firebaseRef, queryCriteria) {
    * @param {?Array.<number>} location The location as [latitude, longitude] pair
    * @param {?double} distanceFromCenter The distance from the center or null.
    */
-  function _fireCallbacksForKey(eventType, key, location, distanceFromCenter) {
+  function _fireCallbacksForKey(eventType, key, location, uid, complete, distanceFromCenter) {
     _callbacks[eventType].forEach(function(callback) {
       if (typeof location === "undefined" || location === null) {
-        callback(key, null, null);
+        callback(key, null, null, null, null);
       }
       else {
-        callback(key, location, distanceFromCenter);
+        callback(key, location, uid, complete, distanceFromCenter);
       }
     });
   }
@@ -129,7 +129,11 @@ var JeoQuery = function (firebaseRef, queryCriteria) {
    * @param {string} key The key of the jeofire location.
    * @param {?Array.<number>} location The location as [latitude, longitude] pair.
    */
-  function _updateLocation(key, location) {
+  function _updateLocation(key, jeoFireObj) {
+    var location = jeoFireObj.l;
+    var uid = jeoFireObj.u;
+    var complete = jeoFireObj.c;
+
     validateLocation(location);
     // Get the key and location
     var distanceFromCenter, isInQuery;
@@ -143,6 +147,8 @@ var JeoQuery = function (firebaseRef, queryCriteria) {
     // Add this location to the locations queried dictionary even if it is not within this query
     _locationsTracked[key] = {
       location: location,
+      uid: uid,
+      complete: complete,
       distanceFromCenter: distanceFromCenter,
       isInQuery: isInQuery,
       jeohash: encodeJeohash(location, g_GEOHASH_PRECISION)
@@ -150,11 +156,11 @@ var JeoQuery = function (firebaseRef, queryCriteria) {
 
     // Fire the "key_entered" event if the provided key has entered this query
     if (isInQuery && !wasInQuery) {
-      _fireCallbacksForKey("key_entered", key, location, distanceFromCenter);
+      _fireCallbacksForKey("key_entered", key, location, uid, complete, distanceFromCenter);
     } else if (isInQuery && oldLocation !== null && (location[0] !== oldLocation[0] || location[1] !== oldLocation[1])) {
-      _fireCallbacksForKey("key_moved", key, location, distanceFromCenter);
+      _fireCallbacksForKey("key_moved", key, location, uid, complete, distanceFromCenter);
     } else if (!isInQuery && wasInQuery) {
-      _fireCallbacksForKey("key_exited", key, location, distanceFromCenter);
+      _fireCallbacksForKey("key_exited", key, location, uid, complete, distanceFromCenter);
     }
   }
 
@@ -191,7 +197,7 @@ var JeoQuery = function (firebaseRef, queryCriteria) {
     delete _locationsTracked[key];
     if (typeof locationDict !== "undefined" && locationDict.isInQuery) {
       var distanceFromCenter = (currentLocation) ? JeoFire.distance(currentLocation, _center) : null;
-      _fireCallbacksForKey("key_exited", key, currentLocation, distanceFromCenter);
+      _fireCallbacksForKey("key_exited", key, currentLocation, null, null, distanceFromCenter);
     }
   }
 
@@ -201,7 +207,7 @@ var JeoQuery = function (firebaseRef, queryCriteria) {
    * @param {Firebase DataSnapshot} locationDataSnapshot A snapshot of the data stored for this location.
    */
   function _childAddedCallback(locationDataSnapshot) {
-    _updateLocation(getKey(locationDataSnapshot), decodeJeoFireObject(locationDataSnapshot.val()));
+    _updateLocation(getKey(locationDataSnapshot), locationDataSnapshot.val());
   }
 
   /**
@@ -210,7 +216,7 @@ var JeoQuery = function (firebaseRef, queryCriteria) {
    * @param {Firebase DataSnapshot} locationDataSnapshot A snapshot of the data stored for this location.
    */
   function _childChangedCallback(locationDataSnapshot) {
-    _updateLocation(getKey(locationDataSnapshot), decodeJeoFireObject(locationDataSnapshot.val()));
+    _updateLocation(getKey(locationDataSnapshot), locationDataSnapshot.val());
   }
 
   /**
@@ -222,7 +228,7 @@ var JeoQuery = function (firebaseRef, queryCriteria) {
     var key = getKey(locationDataSnapshot);
     if (_locationsTracked.hasOwnProperty(key)) {
       _firebaseRef.child(key).once("value", function(snapshot) {
-        var location = snapshot.val() === null ? null : decodeJeoFireObject(snapshot.val());
+        var location = snapshot.val().l === null ? null : snapshot.val().l;
         var jeohash = (location !== null) ? encodeJeohash(location) : null;
         // Only notify observers if key is not part of any other jeohash query or this actually might not be
         // a key exited event, but a key moved or entered event. These events will be triggered by updates
@@ -391,12 +397,12 @@ var JeoQuery = function (firebaseRef, queryCriteria) {
 
       // If the location just left the query, fire the "key_exited" callbacks
       if (wasAlreadyInQuery && !locationDict.isInQuery) {
-        _fireCallbacksForKey("key_exited", key, locationDict.location, locationDict.distanceFromCenter);
+        _fireCallbacksForKey("key_exited", key, locationDict.location, locationDict.uid, locationDict.complete, locationDict.distanceFromCenter);
       }
 
       // If the location just entered the query, fire the "key_entered" callbacks
       else if (!wasAlreadyInQuery && locationDict.isInQuery) {
-        _fireCallbacksForKey("key_entered", key, locationDict.location, locationDict.distanceFromCenter);
+        _fireCallbacksForKey("key_entered", key, locationDict.location, locationDict.uid, locationDict.complete, locationDict.distanceFromCenter);
       }
     }
 
@@ -456,7 +462,7 @@ var JeoQuery = function (firebaseRef, queryCriteria) {
         var key = keys[i];
         var locationDict = _locationsTracked[key];
         if (typeof locationDict !== "undefined" && locationDict.isInQuery) {
-          callback(key, locationDict.location, locationDict.distanceFromCenter);
+          callback(key, locationDict.location, locationDict.uid, locationDict.complete, locationDict.distanceFromCenter);
         }
       }
     }

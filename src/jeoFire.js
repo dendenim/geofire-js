@@ -78,7 +78,7 @@ var JeoFire = function(firebaseRef) {
       if (snapshotVal === null) {
         return null;
       } else {
-        return decodeJeoFireObject(snapshotVal);
+        return snapshotVal;
       }
     });
   };

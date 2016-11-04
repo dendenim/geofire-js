@@ -443,13 +443,13 @@ function encodeJeoFireObject(location, jeohash, complete, uid) {
  * @return {?Array.<number>} location The location as [latitude, longitude] pair or null if
  * decoding fails.
  */
-function decodeJeoFireObject(jeoFireObj) {
-  if (jeoFireObj !== null && jeoFireObj.hasOwnProperty("l") && Array.isArray(jeoFireObj.l) && jeoFireObj.l.length === 2) {
-    return jeoFireObj.l;
-  } else {
-    throw new Error("Unexpected JeoFire location object encountered: " + JSON.stringify(jeoFireObj));
-  }
-}
+// function decodeJeoFireObject(jeoFireObj) {
+//   if (jeoFireObj !== null && jeoFireObj.hasOwnProperty("l") && Array.isArray(jeoFireObj.l) && jeoFireObj.l.length === 2) {
+//     return jeoFireObj.l;
+//   } else {
+//     throw new Error("Unexpected JeoFire location object encountered: " + JSON.stringify(jeoFireObj));
+//   }
+// }
 
 /**
  * Returns the key of a Firebase snapshot across SDK versions.
